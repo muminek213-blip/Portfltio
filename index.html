@@ -355,33 +355,113 @@
     /* ─── ABOUT ─────────────────────────────────────────────────────── */
     #about { background: var(--bg); }
 
-    .about-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 4rem; align-items: start; }
-
-    .photo-block {
-      display: flex; align-items: flex-start; gap: 1.25rem;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 1.4rem;
-      margin-bottom: 1.75rem;
+    /* trzy kolumny: foto | tekst+karty | skills */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr 320px;
+      gap: 3rem;
+      align-items: start;
     }
 
-    .photo-slot {
-      width: 88px; height: 88px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: .35rem; flex-shrink: 0; cursor: pointer;
-      overflow: hidden; position: relative;
-      transition: opacity .2s;
+    /* ── EDITORIAL PHOTO CARD ── */
+    .photo-card {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      box-shadow:
+        0 40px 100px rgba(14,30,61,.22),
+        0 0 0 1px rgba(14,30,61,.06);
+      cursor: default;
     }
-    .photo-slot:hover { opacity: .9; }
-    .photo-slot svg { width: 26px; height: 26px; fill: rgba(255,255,255,.65); }
-    .photo-slot span { font-size: .56rem; color: rgba(255,255,255,.55); text-align: center; letter-spacing: .05em; text-transform: uppercase; }
-    .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
-    .photo-slot img.loaded { display: block; }
 
-    .photo-info h3 { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: .2rem; }
-    .photo-info p { font-size: .84rem; color: var(--muted); margin-bottom: .55rem; }
-    .photo-badges { display: flex; gap: .35rem; flex-wrap: wrap; }
-    .photo-badge { font-size: .64rem; font-weight: 700; color: var(--blue); background: var(--accent2); padding: .15rem .52rem; border-radius: 4px; }
+    /* zdjęcie pełna karta */
+    .photo-frame {
+      position: absolute; inset: 0;
+    }
+    .photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .photo-card:hover .photo-frame img { transform: scale(1.04); }
+
+    /* gradient overlay od dołu */
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 35%,
+        rgba(8,18,42,.55) 70%,
+        rgba(8,18,42,.88) 100%
+      );
+      z-index: 1;
+    }
+
+    /* name badge na dole karty */
+    .photo-name-badge {
+      position: absolute;
+      bottom: 1.5rem; left: 1.5rem; right: 1.5rem;
+      z-index: 2;
+      display: flex; align-items: center; gap: .85rem;
+    }
+    .photo-name-badge .badge-av {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: .9rem;
+      font-weight: 900; color: #fff; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(42,106,219,.4);
+    }
+    .photo-name-badge h3 {
+      font-family: 'Outfit', sans-serif; font-size: 1.05rem;
+      font-weight: 800; color: #fff; margin-bottom: .1rem;
+    }
+    .photo-name-badge p { font-size: .72rem; color: rgba(255,255,255,.6); }
+
+    /* floating status — góra prawa */
+    .photo-status {
+      position: absolute;
+      top: 1.1rem; right: 1.1rem;
+      z-index: 2;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      padding: .38rem .85rem;
+      display: flex; align-items: center; gap: .45rem;
+      font-size: .7rem; font-weight: 700; color: #fff;
+      white-space: nowrap;
+    }
+    .status-dot-green {
+      width: 7px; height: 7px; background: #4ade80;
+      border-radius: 50%;
+      animation: blink 2.2s ease-in-out infinite; flex-shrink: 0;
+    }
+
+    /* floating exp — góra lewa */
+    .photo-exp {
+      position: absolute;
+      top: 1.1rem; left: 1.1rem;
+      z-index: 2;
+      background: var(--gold);
+      border-radius: 14px;
+      padding: .55rem .9rem;
+      box-shadow: 0 6px 24px rgba(240,165,0,.4);
+      text-align: center; line-height: 1.1;
+    }
+    .photo-exp strong {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem; font-weight: 900; color: var(--navy);
+    }
+    .photo-exp span {
+      font-size: .58rem; font-weight: 800;
+      color: rgba(14,30,61,.65);
+      text-transform: uppercase; letter-spacing: .08em;
+    }
 
     .about-text p { color: var(--text2); font-size: .98rem; line-height: 1.9; margin-bottom: 1.1rem; }
     .about-text strong { color: var(--navy); font-weight: 600; }
@@ -518,27 +598,6 @@
     }
     .btn-outline:hover { background: var(--bg2); border-color: var(--blue); }
 
-    /* ─── PROOF ──────────────────────────────────────────────────────── */
-    #proof { background: var(--bg); }
-
-    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-    .quote {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 1.4rem 1.3rem;
-      position: relative;
-    }
-    .quote::before {
-      content: '\201C';
-      font-family: 'Outfit', sans-serif;
-      font-size: 3.5rem; font-weight: 800;
-      color: var(--accent2); line-height: 1;
-      position: absolute; top: .5rem; left: 1.1rem;
-    }
-    .quote p { font-size: .9rem; color: var(--text2); line-height: 1.78; padding-top: 1.5rem; font-style: italic; }
-    .quote footer { margin-top: .9rem; display: flex; flex-direction: column; gap: .15rem; }
-    .quote strong { font-size: .82rem; color: var(--navy); font-weight: 600; font-style: normal; }
-    .quote span { font-size: .74rem; color: var(--muted); }
-
     /* ─── TIMELINE ───────────────────────────────────────────────────── */
     #tl-section { background: var(--bg2); }
 
@@ -664,12 +723,11 @@
       background: linear-gradient(135deg, var(--bg3), var(--accent2));
       border-radius: 7px; margin-top: .65rem;
       overflow: hidden; display: flex; align-items: center; justify-content: center;
-      position: relative; cursor: pointer;
+      position: relative; cursor: default;
     }
     .tl-screenshot svg { width: 18px; height: 18px; stroke: var(--navy); fill: none; stroke-width: 1.5; opacity: .3; }
     .tl-screenshot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
     .tl-screenshot img.loaded { display: block; }
-    .tl-screenshot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
     .tl-tags { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .45rem; }
     .tl-tag { font-size: .62rem; color: var(--text2); background: var(--bg2); border: 1px solid var(--border); padding: .08rem .38rem; border-radius: 4px; }
@@ -722,8 +780,28 @@
       position: relative; overflow: hidden; flex-shrink: 0;
     }
     .proj-flip.featured .proj-shot { height: 220px; }
-    .proj-shot img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .proj-shot img { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; inset: 0; }
     .proj-shot img.loaded { display: block; }
+    .proj-shot img.loaded ~ .proj-shot-ph { display: none; }
+
+    /* projekty bez obrazka — logo firmy jako SVG */
+    .proj-shot-no-img {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .75rem; width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--bg3), var(--accent2));
+    }
+    .proj-shot-no-img .co-logo-wrap {
+      display: flex; align-items: center; justify-content: center;
+      padding: .6rem 1rem;
+      background: rgba(255,255,255,.7);
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(14,30,61,.08);
+    }
+    .proj-shot-no-img .co-logo-wrap svg { display: block; }
+    .proj-shot-no-img .no-img-label {
+      font-size: .62rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: .1em; font-weight: 700;
+    }
 
     .proj-shot-ph { display: flex; flex-direction: column; align-items: center; gap: .4rem; opacity: .38; }
     .proj-shot-ph svg { width: 30px; height: 30px; stroke: var(--navy); fill: none; stroke-width: 1.5; }
@@ -956,19 +1034,21 @@
     .detail-text p+p { margin-top: .85rem; }
     .detail-text strong { color: var(--navy); }
 
-    .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .gallery { display: grid; gap: 1rem; }
+    .gallery.cols-1 { grid-template-columns: 1fr; }
+    .gallery.cols-2 { grid-template-columns: 1fr 1fr; }
+    .gallery.cols-3 { grid-template-columns: 1fr 1fr; } /* 2+1 */
+    .gallery.cols-4 { grid-template-columns: 1fr 1fr; }
+    .gallery.cols-3 .gal-slot:first-child { grid-column: span 2; }
     .gal-slot {
       aspect-ratio: 16/9;
       background: linear-gradient(135deg, var(--bg3), var(--accent2));
-      border: 1.5px dashed var(--border); border-radius: var(--r);
+      border: 1px solid var(--border); border-radius: var(--r);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: .45rem; position: relative; overflow: hidden; cursor: pointer;
-      transition: border-color .2s, background .2s;
+      gap: .45rem; position: relative; overflow: hidden; cursor: default;
     }
-    .gal-slot:hover { border-color: var(--blue); background: linear-gradient(135deg, var(--accent2), #daeeff); }
-    .gal-slot svg { width: 26px; height: 26px; stroke: var(--navy); fill: none; stroke-width: 1.5; opacity: .3; }
+    .gal-slot svg { width: 26px; height: 26px; stroke: var(--navy); fill: none; stroke-width: 1.5; opacity: .25; }
     .gal-slot span { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
-    .gal-slot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
     .gal-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; border-radius: var(--r); }
     .gal-slot img.loaded { display: block; }
 
@@ -999,7 +1079,6 @@
       .about-grid, .contact-grid, .fit-grid { grid-template-columns: 1fr; gap: 2rem; }
       .skills-panel { position: relative; top: auto; }
       .value-grid { grid-template-columns: 1fr; }
-      .proof-grid { grid-template-columns: 1fr; }
       .proj-grid { grid-template-columns: 1fr; }
       .proj-card.featured { grid-column: span 1; }
       .gallery, .results-row { grid-template-columns: 1fr; }
@@ -1010,6 +1089,9 @@
       .nav-links.open { display: flex; position: absolute; top: 68px; left: 0; right: 0; background: var(--navy); flex-direction: column; border-top: 1px solid rgba(255,255,255,.08); }
       .nav-links li button { height: 52px; justify-content: flex-start; width: 100%; padding: 0 1.5rem; border-bottom: none; }
       .projects-cta { flex-direction: column; gap: 1rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .photo-card { max-height: 420px; aspect-ratio: 4/3; }
+      .photo-status { font-size: .62rem; padding: .3rem .65rem; }
     }
 
     @media(prefers-reduced-motion: reduce) {
@@ -1106,24 +1188,32 @@
         <div class="section-header reveal"><h2 data-i18n="about_h2">O mnie</h2><span class="pill" data-i18n="about_pill">Senior PM</span></div>
 
         <div class="about-grid">
-          <div>
-            <div class="photo-block reveal d1">
-              <div class="photo-slot" role="button" tabindex="0" aria-label="Dodaj zdjęcie profilowe">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                <img id="photoImg" alt="Patryk Milaniuk" />
-              </div>
-              <input type="file" id="photoIn" accept="image/*" style="display:none" />
-              <div class="photo-info">
+
+          <!-- KOLUMNA 1: foto -->
+          <div class="photo-card reveal d1">
+            <div class="photo-frame">
+              <img src="photo.jpg" alt="Patryk Milaniuk" id="photoImg" />
+            </div>
+            <div class="photo-overlay"></div>
+            <div class="photo-exp">
+              <strong>7+</strong>
+              <span>lat exp.</span>
+            </div>
+            <div class="photo-status">
+              <span class="status-dot-green"></span>
+              <span data-i18n="hero_badge">Dostępny na nowe projekty</span>
+            </div>
+            <div class="photo-name-badge">
+              <div class="badge-av">PM</div>
+              <div>
                 <h3>Patryk Milaniuk</h3>
                 <p data-i18n="about_location">Senior IT Project Manager · Olsztyn / zdalnie</p>
-                <div class="photo-badges">
-                  <span class="photo-badge">PSE Innowacje</span>
-                  <span class="photo-badge">B2B</span>
-                  <span class="photo-badge" data-i18n="badge_eng">Angielski C1</span>
-                </div>
               </div>
             </div>
+          </div>
 
+          <!-- KOLUMNA 2: tekst + value cards -->
+          <div>
             <div class="about-text reveal d2">
               <p data-i18n-html="about_p1">Przez 7+ lat prowadziłem projekty tam, gdzie nie ma miejsca na błędy — najpierw w <strong>Michelin Polska</strong> w środowisku międzynarodowym, a obecnie w <strong>PSE Innowacje</strong>, gdzie oprogramowanie wspiera krytyczne procesy rynku energii w Polsce.</p>
               <p data-i18n-html="about_p2">Mam inżynierskie wykształcenie i techniczną intuicję, ale równie swobodnie rozmawiam z Zarządem o strategii jak z deweloperem o architekturze. Łączę myślenie produktowe z zarządczym — i dowożę rzeczy, które <strong>działają na produkcji</strong>.</p>
@@ -1138,9 +1228,11 @@
             </div>
           </div>
 
+          <!-- KOLUMNA 3: skills -->
           <aside class="skills-panel reveal d3" aria-label="Kompetencje" id="skillsPanel">
             <!-- filled by JS -->
           </aside>
+
         </div>
       </div>
     </section>
@@ -1192,31 +1284,6 @@
 
     <!-- REKOMENDACJE -->
     
-    <section id="proof"> 
-      <div class="container">
-        <div class="section-header reveal"><h2 data-i18n="proof_h2">Rekomendacje</h2><span class="pill" data-i18n="proof_pill">Opinie</span></div>
-
-        <!--<div class="proof-grid">
-          <blockquote class="quote reveal d1">
-            <p data-i18n="q1_text">„Projekt dowieziony zgodnie z harmonogramem mimo zmian regulacyjnych w trakcie realizacji. Komunikacja była konkretna i przewidywalna."</p>
-            <footer><strong data-i18n="q1_who">Dyrektor / sektor energetyczny</strong><span data-i18n="q1_ref">referencja (do uzupełnienia)</span></footer>
-          </blockquote>
-          <blockquote class="quote reveal d2">
-            <p data-i18n="q2_text">„Patryk świetnie łączy perspektywę biznesową i techniczną. Zespół wiedział, co robić, a interesariusze dostawali jasny obraz sytuacji."</p>
-            <footer><strong data-i18n="q2_who">Product / Delivery Lead</strong><span data-i18n="q2_ref">referencja (do uzupełnienia)</span></footer>
-          </blockquote>
-          <blockquote class="quote reveal d3">
-            <p data-i18n="q3_text">„W trudnym środowisku produkcyjnym potrafi dowieźć zmianę bez przestojów. Dobra kontrola ryzyk i dostawców."</p>
-            <footer><strong data-i18n="q3_who">Operations / przemysł</strong><span data-i18n="q3_ref">referencja (do uzupełnienia)</span></footer>
-          </blockquote>
-        </div>-->
-      
-        <p class="reveal d4" style="margin-top:1rem; color:var(--muted); font-size:.8rem;" data-i18n="proof_note">
-          ""
-        </p>
-      </div>
-    </section>
-
     <!-- OŚ CZASU -->
     <section id="tl-section">
       <div class="container">
@@ -1301,7 +1368,7 @@
 
     <div class="detail-body">
       <div class="detail-sec"><h2 data-i18n="d_context">Kontekst i cel projektu</h2><div class="detail-text" id="dContext"></div><div id="dLinkWrap"></div></div>
-      <div class="detail-sec"><h2 data-i18n="d_screens">Screenshoty</h2><div class="gallery" id="dGallery"></div><p class="upload-note"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span data-i18n="upload_note">Kliknij slot aby wgrać własny screenshot</span></p></div>
+      <div class="detail-sec"><h2 data-i18n="d_screens">Screenshoty</h2><div class="gallery" id="dGallery"></div></div>
       <div class="detail-sec"><h2 data-i18n="d_role">Moja rola</h2><div class="detail-text" id="dRole"></div></div>
       <div class="detail-sec"><h2 data-i18n="d_results">Efekty</h2><div class="results-row" id="dResults"></div></div>
       <div class="detail-sec"><h2 data-i18n="d_tech">Technologie i narzędzia</h2><div class="detail-tags" id="dTags"></div></div>
@@ -1473,6 +1540,30 @@
 
   function T(key) {
     return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || (TRANSLATIONS.pl[key]) || key;
+  }
+
+  // ─── COMPANY LOGOS (inline SVG) ──────────────────────────────────────
+  function getLogoSVG(company) {
+    if (company === 'Michelin Polska') {
+      // Michelin wordmark — żółty prostokąt + biały napis (oficjalne kolory)
+      return `<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="40" rx="4" fill="#FFD100"/>
+        <text x="60" y="28" text-anchor="middle"
+          font-family="Arial Black, Arial, sans-serif"
+          font-size="17" font-weight="900" fill="#1A1A1A" letter-spacing=".5">MICHELIN</text>
+      </svg>`;
+    }
+    if (company === 'PSE Innowacje') {
+      // PSE wordmark — granatowe tło, biały napis (zgodnie z brandingiem PSE S.A.)
+      return `<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="40" rx="4" fill="#003087"/>
+        <text x="60" y="17" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#fff" letter-spacing="2">PSE</text>
+        <text x="60" y="32" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="8.5" font-weight="400" fill="rgba(255,255,255,.75)" letter-spacing="1.5">INNOWACJE</text>
+      </svg>`;
+    }
+    return '';
   }
 
   function applyTranslations() {
@@ -1871,19 +1962,29 @@
     const FACTS = lang === 'en' ? FACTS_EN : FACTS_PL;
 
     PROJ.forEach((p, i) => {
-      const facts = FACTS[p.id] || [];
+      const facts   = FACTS[p.id] || [];
+      const hasImg  = !!(p.screenshot);
       const wrapper = document.createElement('div');
       wrapper.className = 'proj-flip reveal d' + Math.min(i+1,6) + (p.featured ? ' featured' : '');
       const card = document.createElement('div');
       card.className = 'proj-card';
+
+      // proj-shot inner: image + placeholder OR logo block
+      const shotInner = hasImg
+        ? `<img id="pshot-${p.id}" alt="${p.title}" />
+           <div class="proj-shot-ph">
+             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+             <span>${T('screenshot')}</span>
+           </div>`
+        : `<div class="proj-shot-no-img">
+             <div class="co-logo-wrap">${getLogoSVG(p.company)}</div>
+             <span class="no-img-label">${p.company}</span>
+           </div>`;
+
       card.innerHTML = `
         <div class="proj-face proj-front">
           <div class="proj-shot">
-            <img id="pshot-${p.id}" alt="${p.title}" />
-            <div class="proj-shot-ph">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>${T('screenshot')}</span>
-            </div>
+            ${shotInner}
             <div class="proj-shot-badge">${p.company}</div>
             <div class="proj-flip-hint">${T('flip_hint')}</div>
           </div>
@@ -1914,10 +2015,20 @@
       `;
       wrapper.appendChild(card);
       grid.appendChild(wrapper);
-      if (p.screenshot) {
+
+      // load image only when it actually exists
+      if (hasImg) {
         const im = card.querySelector('img');
-        if (im) { im.src = p.screenshot; im.onload = () => im.classList.add('loaded'); }
+        if (im) {
+          im.onload  = () => im.classList.add('loaded');
+          im.onerror = () => {
+            // image path broken — swap to no-img block silently
+            im.style.display = 'none';
+          };
+          im.src = p.screenshot;
+        }
       }
+
       card.querySelector('.proj-front').addEventListener('click', (e) => {
         if (e.target.closest('.pb-btn-primary') || e.target.closest('.pb-btn-ghost')) return;
         wrapper.classList.toggle('flipped');
@@ -1949,16 +2060,15 @@
           </div>
           <div class="tl-name">${it.name}</div>
           <div class="tl-tags">${it.tags.map(t=>`<span class="tl-tag">${t}</span>`).join('')}</div>
-          <div class="tl-screenshot" title="${T('screenshot')}">
+          <div class="tl-screenshot">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <img id="${tid}" alt="" />
-            <input type="file" accept="image/*" data-tid="${tid}" aria-label="${T('screenshot')}" />
           </div>
         </div>
       `;
 
       el.querySelector('.tl-card').addEventListener('click', e => {
-        if (e.target.closest('input') || e.target.closest('.tl-screenshot')) return;
+        if (e.target.closest('.tl-screenshot')) return;
         if (activeItem && activeItem !== el) {
           activeItem.classList.remove('tl-active');
           const pc = activeItem.querySelector('.tl-card');
@@ -1971,16 +2081,6 @@
           el.classList.add('tl-active'); activeItem = el;
           el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
         }
-      });
-
-      el.querySelector('input[type=file]').addEventListener('change', function(e) {
-        const file = e.target.files[0]; if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          const img = document.getElementById(this.dataset.tid);
-          img.src = ev.target.result; img.classList.add('loaded');
-        };
-        reader.readAsDataURL(file);
       });
 
       const d = PROJ_DATA[it.id];
@@ -2030,7 +2130,30 @@
 
     const gal = document.getElementById('dGallery');
     gal.innerHTML = '';
-    for (let i = 0; i < 4; i++) {
+    const raw = PROJ_DATA[p.id];
+    // collect valid screenshot paths (non-empty)
+    const shots = (raw && raw.screenshots || []).filter(s => s && s.trim() !== '');
+    const count = Math.min(Math.max(shots.length || 2, 2), 4); // clamp 2–4, default 2
+
+    // set grid class
+    gal.className = 'gallery cols-' + count;
+
+    // if project has no screenshots at all — show logo placeholder instead of gallery
+    if (!raw || !raw.screenshots || raw.screenshots.every(s => !s || !s.trim())) {
+      gal.innerHTML = `
+        <div class="gal-slot" style="grid-column:span 2; cursor:default; border-style:solid; border-color:var(--border);">
+          <div class="proj-shot-no-img" style="gap:.6rem;">
+            <div class="co-logo-wrap">${getLogoSVG(p.company)}</div>
+            <span class="no-img-label">${lang === 'en' ? 'No screenshots available for this project' : 'Brak screenshotów dla tego projektu'}</span>
+          </div>
+        </div>`;
+      applyTranslations();
+      return;
+    }
+
+    // build slots — only as many as we have screenshots (2–4)
+    const totalSlots = Math.max(shots.length, 2);
+    for (let i = 0; i < Math.min(totalSlots, 4); i++) {
       const slot = document.createElement('div');
       slot.className = 'gal-slot';
       const gid = `gs-${p.id}-${i}`;
@@ -2038,28 +2161,27 @@
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <span>${T('screenshot')} ${i+1}</span>
         <img id="${gid}" alt="" />
-        <input type="file" accept="image/*" aria-label="${T('screenshot')} ${i+1}" />
       `;
-      slot.querySelector('input').addEventListener('change', function(e) {
-        const file = e.target.files[0]; if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          const img = document.getElementById(gid);
-          img.src = ev.target.result; img.classList.add('loaded');
-          if (i===0) {
-            const thumb = document.getElementById('pshot-'+p.id);
-            if (thumb) { thumb.src = ev.target.result; thumb.classList.add('loaded'); }
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-      const raw = PROJ_DATA[p.id];
-      if (raw && raw.screenshots && raw.screenshots[i]) {
+
+      const srcPath = shots[i];
+      if (srcPath) {
         const imgEl = slot.querySelector('img');
-        if (imgEl) { imgEl.src = raw.screenshots[i]; imgEl.onload = () => imgEl.classList.add('loaded'); }
+        if (imgEl) {
+          imgEl.onload  = () => {
+            imgEl.classList.add('loaded');
+            slot.querySelector('svg').style.display = 'none';
+            slot.querySelector('span').style.display = 'none';
+          };
+          imgEl.onerror = () => {};
+          imgEl.src = srcPath;
+        }
         if (i===0) {
           const thumb = document.getElementById('pshot-'+p.id);
-          if (thumb) { thumb.src = raw.screenshots[i]; thumb.onload = () => thumb.classList.add('loaded'); }
+          if (thumb) {
+            thumb.onload  = () => thumb.classList.add('loaded');
+            thumb.onerror = () => {};
+            thumb.src = srcPath;
+          }
         }
       }
       gal.appendChild(slot);
@@ -2100,22 +2222,6 @@
     });
   }, { threshold: .5 });
   document.querySelectorAll('.cnt').forEach(c => cntObs.observe(c));
-
-  // ─── PHOTO UPLOAD ─────────────────────────────────────────────────────
-  document.getElementById('photoIn').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img  = document.getElementById('photoImg');
-      const slot = img.closest('.photo-slot');
-      img.src = ev.target.result;
-      img.classList.add('loaded');
-      slot.querySelector('svg').style.display  = 'none';
-      slot.querySelector('span').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  });
 
   // ─── TOAST + COPY ─────────────────────────────────────────────────────
   function showToast(msg) {
